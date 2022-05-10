@@ -1,0 +1,55 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // {
+        //     "name": "npm start",
+        //     "type": "node-terminal",
+        //     "request": "launch",
+        //     "command": "npm run start",
+        //     "env": {
+        //         "BROWSER": "none"
+        //     },
+        //     "cwd": "${workspaceRoot}/src",
+        // },
+        {
+            "name": "npm run server",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run server",
+            "env": {
+                "BROWSER": "none"
+            },
+            "cwd": "${workspaceFolder}/src",
+        },
+        {
+            "name": "npm run client",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run client",
+            "env": {
+                "BROWSER": "none"
+            },
+            "cwd": "${workspaceFolder}/src",
+        },
+        {
+            "name": "open chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src/client",
+            "skipFiles": [
+                "${workspaceFolder}/src/client/node_modules/**/*.js",
+              ],
+        }
+    ],
+    "compounds": [
+        {
+          "name": "run client, server, and open chrome",
+          "configurations": ["npm run server", "npm run client", "open chrome"],
+          "stopAll": true,
+        }
+    ]
+}
