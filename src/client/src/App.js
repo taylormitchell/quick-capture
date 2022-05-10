@@ -14,12 +14,30 @@ function App() {
 
   // Load notes
   useEffect(() => {
-    fetch("/api/notes")
-      .then((res) => res.json())
-      .then((body) => {
-        setNotes(body.data.map(n => new Note(n)))
-        setLoaded(true)
-      });
+   fetch("/api/notes")
+     .then((res) => res.json())
+     .then((body) => {
+       setNotes(body.data.map(n => new Note(n)))
+       setLoaded(true)
+     });
+  }, []);
+
+  // Sync notes
+  useEffect(() => {
+    const id = setInterval(() => {
+      fetch("/api/notes")
+        .then((res) => res.json())
+        .then((body) => {
+          setNotes(notes => {
+            let res = [...notes, ...body.data];
+            // drop duplicates, keeping those in client 
+            res = Array.from(new Map(res.map(n => [n.id, n])).values());
+            return res.map(n => new Note(n));
+          })
+        });
+      }, 5000);
+
+    return () => clearInterval(id);
   }, []);
 
   // Save notes
@@ -30,8 +48,6 @@ function App() {
         body: JSON.stringify(notes),
         headers: { "Content-Type": "application/json" },
       })
-        .then((res) => res.json())
-        .then((body) => console.log(body));
     }
   }, [notes]);
 
@@ -50,7 +66,6 @@ function App() {
       {notes.slice().reverse().map((note) => (
         <div key={note.id}>
           <p>{note.text}</p>
-          {/* <p style={{size: "0.3em"}}>{(new Date(note.timestamp)).toISOString()}</p> */}
           <p style={{fontSize: "0.2em"}}>{(new Date(note.timestamp)).toISOString()}</p>
         </div>
       ))}
