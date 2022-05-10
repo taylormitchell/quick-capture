@@ -53,7 +53,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Quick Capture</h1>
+      <h1>Quick Capture!!!</h1>
       {/* Add note */}
         <form onSubmit={(e) => {
           e.preventDefault();
