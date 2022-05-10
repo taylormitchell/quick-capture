@@ -7,9 +7,10 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "client": "cd client && npm run start",
     "server": "nodemon server.js",
-    "setup": "echo \"[]\" > db/db.json && npm install && cd client && npm install",
+    "install-full": "npm install && cd client && npm install",
+    "build": "cd client && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-prod": "cd client && npm run build && cd .. && NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production node server.js"
   },
   "author": "",
   "license": "ISC",

@@ -2,6 +2,12 @@ const express = require('express');
 const json = require('body-parser').json;
 const fs = require('fs');
 
+const DB_PATH = './db/db.json';
+const BACKUPS_PATH = './db/backups';
+if(!fs.existsSync(DB_PATH)) {
+  fs.writeFileSync(DB_PATH, JSON.stringify([]), 'utf8');
+}
+
 const app = express();
 
 app.set('port', (process.env.PORT || 3001));
@@ -13,14 +19,14 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use((req, res, next) => {
-  const stats = fs.statSync('./db/db.json');
+  const stats = fs.statSync(DB_PATH);
   res.setHeader('Last-Modified', (new Date(stats.mtimeMs)).toUTCString());
   next();
 })
 
 app.get('/api/notes', (req, res) => {
     console.log("GET /api/notes");
-    const notes = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+    const notes = JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
     res.json({ message: 'success', data: notes });
 })
 
@@ -32,8 +38,8 @@ app.head('/api/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
     console.log("POST /api/notes");
     const notes = req.body;
-    fs.copyFileSync('./db/db.json', `./db/backups/${Date.now()}.db.json`);
-    fs.writeFileSync('./db/db.json', JSON.stringify(notes, null, 2));
+    fs.copyFileSync(DB_PATH, path.join(BACKUPS_PATH, `${Date.now()}.db.json`));
+    fs.writeFileSync(DB_PATH, JSON.stringify(notes, null, 2));
     res.json({ message: 'success' });
 });
 
