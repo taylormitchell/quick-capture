@@ -2,22 +2,27 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import {v4 as uuidv4} from "uuid";
 
-function Note({ id, text, timestamp }) {
-  this.id = id || uuidv4();
-  this.text = text || "";
-  this.timestamp = timestamp || Date.now();
+type Note = {
+  id: string,
+  text: string,
+  timestamp: number
+}
+
+function createNote(text: string): Note {
+  return { id: uuidv4(), text: text, timestamp: Date.now() }
 }
 
 function App() {
-  const [notes, setNotes] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [entry, setEntry] = useState<string>("");
 
   // Load notes
   useEffect(() => {
    fetch("/api/notes")
      .then((res) => res.json())
      .then((body) => {
-       setNotes(body.data.map(n => new Note(n)))
+       setNotes(body.data)
        setLoaded(true)
      })
      .catch(err => console.log(err));
@@ -30,10 +35,10 @@ function App() {
         .then((res) => res.json())
         .then((body) => {
           setNotes(notes => {
-            let res = [...notes, ...body.data];
+            let res: Note[] = [...notes, ...body.data];
             // drop duplicates, keeping those in client 
             res = Array.from(new Map(res.map(n => [n.id, n])).values());
-            return res.map(n => new Note(n));
+            return res
           })
         })
         .catch(err => console.log(err));
@@ -53,15 +58,22 @@ function App() {
     .catch(err => console.log(err));
   }, [notes, loaded]);
 
+  const entrySubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setNotes(notes => [...notes, createNote(entry)]);
+    setEntry("")
+  } 
+
+  const entryChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEntry(e.currentTarget.value);
+  }
+
   return (
     <div className="App">
       <h1>Quick Capture</h1>
       {/* Add note */}
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          setNotes(notes => [...notes, new Note({text: e.target.text.value})]);
-        }}>
-          <input id="text" type="text" placeholder="Enter note"/>
+        <form onSubmit={entrySubmitHandler}>
+          <input id="text" type="text" placeholder="Enter note" value={entry} onChange={entryChangeHandler}/>
           <input type="submit" value="Submit"/>
         </form>
       {/* List notes */}
