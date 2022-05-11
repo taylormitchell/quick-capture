@@ -1,6 +1,7 @@
 const express = require('express');
 const json = require('body-parser').json;
 const fs = require('fs');
+const path = require('path');
 
 const DB_PATH = './db/db.json';
 const BACKUPS_PATH = './db/backups';

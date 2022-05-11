@@ -19,7 +19,8 @@ function App() {
      .then((body) => {
        setNotes(body.data.map(n => new Note(n)))
        setLoaded(true)
-     });
+     })
+     .catch(err => console.log(err));
   }, []);
 
   // Sync notes
@@ -34,7 +35,8 @@ function App() {
             res = Array.from(new Map(res.map(n => [n.id, n])).values());
             return res.map(n => new Note(n));
           })
-        });
+        })
+        .catch(err => console.log(err));
       }, 5000);
 
     return () => clearInterval(id);
@@ -42,14 +44,14 @@ function App() {
 
   // Save notes
   useEffect(() => {
-    if(loaded) {
-      fetch("/api/notes", {
-        method: "POST",
-        body: JSON.stringify(notes),
-        headers: { "Content-Type": "application/json" },
-      })
-    }
-  }, [notes]);
+    if(!loaded) return
+    fetch("/api/notes", {
+      method: "POST",
+      body: JSON.stringify(notes),
+      headers: { "Content-Type": "application/json" },
+    })
+    .catch(err => console.log(err));
+  }, [notes, loaded]);
 
   return (
     <div className="App">
