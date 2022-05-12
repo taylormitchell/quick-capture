@@ -12,7 +12,7 @@ export type Note = {
 
 export function create(note: Partial<Note>): Note {
   const now = Date.now();
-  const tomorrow = now + 24*60*60*1000;
+  // const tomorrow = now + 24*60*60*1000;
 
   return {
     id: note.id || uuidv4(),
@@ -20,7 +20,7 @@ export function create(note: Partial<Note>): Note {
     interval: note.interval || 1,
     createdDate: note.createdDate || now,
     lastModifiedDate: note.lastModifiedDate || now,
-    dueDate: note.dueDate || tomorrow,
+    dueDate: note.dueDate || now,
     state: note.state || "Active",
   };
 }

@@ -40,8 +40,8 @@ const Entry = (props: Props) => {
         style={{height: height, overflowY: "hidden"}}
         autoFocus={true}
       />
-      {/* <input type="submit" value="↑" /> */}
-      <input type="submit" value="Submit" />
+      <input type="submit" value="↑" />
+      {/* <input type="submit" value="Submit" /> */}
     </form>
   );
 };

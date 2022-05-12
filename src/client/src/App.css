@@ -27,6 +27,7 @@ html, body, #root, .App, .stream {
   max-height: 100px;
   min-height: 50px;
   border: none;
+  font-size: 1em;
 }
 
 .entry > textarea:focus {
@@ -35,6 +36,7 @@ html, body, #root, .App, .stream {
 
 .entry > input {
   height: min-content;
+  font-size: 1em;
 }
 
 .column {

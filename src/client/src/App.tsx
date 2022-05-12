@@ -84,8 +84,8 @@ function App() {
         <Inbox {...{inboxNotes, updateNote, addNote}} />
       )}
       <nav>
-        <button className={view === "stream"? "selected" : ""} onClick={() => setView("stream")}>Input</button>
-        <button className={view === "inbox"? "selected" : ""} onClick={() => setView("inbox")}>Process ({inboxNotes.length})</button>
+        <button className={view === "stream"? "selected" : ""} onClick={() => setView("stream")}>Entry</button>
+        <button className={view === "inbox"? "selected" : ""} onClick={() => setView("inbox")}>Inbox</button>
       </nav>
     </div>
   );
