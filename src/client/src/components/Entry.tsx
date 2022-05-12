@@ -1,31 +1,46 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 type Props = {
   addNote: (text: string) => void;
 };
 const Entry = (props: Props) => {
-  const [entry, setEntry] = useState<string>("");
+  const initialText = ""
+  const initialHeight = "auto"
+  const [entry, setEntry] = useState<string>(initialText);
+  const [height, setHeight] = useState<string>(initialHeight);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-  const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEntry(e.currentTarget.value);
+  const changeHandler = () => {
+    let textArea = textAreaRef.current!;
+    setEntry(textArea.value);
+    if(textArea.clientHeight < textArea.scrollHeight) {
+      setHeight(textArea.scrollHeight + "px")
+    } else if(textArea.value === "") {
+      setHeight(initialHeight)
+    }
   };
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.addNote(entry);
-    setEntry("");
+    setEntry(initialText);
+    setHeight(initialHeight)
+    textAreaRef.current!.focus();
   };
+
 
   return (
     <form className="entry" onSubmit={submitHandler}>
       <textarea
+        ref={textAreaRef}
         id="text"
         placeholder="Enter note"
         value={entry}
         onChange={changeHandler}
+        style={{height: height, overflowY: "hidden"}}
         autoFocus={true}
       />
-      <input type="submit" value="Submit" />
+      <input type="submit" value="↑" />
     </form>
   );
 };

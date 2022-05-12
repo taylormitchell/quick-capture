@@ -7,7 +7,6 @@ import Entry from "./components/Entry";
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
-  
 
   // Load notes
   useEffect(() => {
@@ -55,40 +54,38 @@ function App() {
     });
   };
 
-  const addNote = (text: string) => { 
+  const addNote = (text: string) => {
     setNotes((notes) => [...notes, createNote({ text })]);
-  }
+  };
 
   type View = "stream" | "inbox";
   const [view, setView] = useState<View>("stream");
 
   return (
     <div className="App">
-      <nav>
-        <button onClick={() => setView("stream")}>Stream</button>
-        <button onClick={() => setView("inbox")}>Inbox</button>
-      </nav>
       {view === "stream" ? (
-        <div id="stream">
+        <div className="stream">
           <div className="column">
+            <div className="notes" style={{ overflow: "scroll" }}>
+              {notes
+                .slice()
+                .reverse()
+                .map((note) => (
+                  <Card
+                    key={note.id}
+                    note={note}
+                    keep={() => {}}
+                    archive={() => {}}
+                    modify={(values: Partial<Note>) => modifyNote(note.id, values)}
+                  />
+                  // <div key={note.id}>
+                  //   <p>{note.text}</p>
+                  //   <p style={{ fontSize: "0.2em" }}>{new Date(note.createdDate).toISOString()}</p>
+                  //   {/* <p style={{ fontSize: "0.2em" }}>{note.createdDate}</p> */}
+                  // </div>
+                ))}
+            </div>
             <Entry addNote={addNote} />
-            {notes
-              .slice()
-              .reverse()
-              .map((note) => (
-                <Card
-                  key={note.id}
-                  note={note}
-                  keep={() => {}}
-                  archive={() => {}}
-                  modify={(values: Partial<Note>) => modifyNote(note.id, values)}
-                />
-                // <div key={note.id}>
-                //   <p>{note.text}</p>
-                //   <p style={{ fontSize: "0.2em" }}>{new Date(note.createdDate).toISOString()}</p>
-                //   {/* <p style={{ fontSize: "0.2em" }}>{note.createdDate}</p> */}
-                // </div>
-              ))}
           </div>
         </div>
       ) : (
@@ -96,6 +93,10 @@ function App() {
           <p>This is the inbox</p>
         </div>
       )}
+      <nav>
+        <button onClick={() => setView("stream")}>Stream</button>
+        <button onClick={() => setView("inbox")}>Inbox</button>
+      </nav>
     </div>
   );
 }
