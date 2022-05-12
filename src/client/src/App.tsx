@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Note, create as createNote } from "./models/Note";
+import * as note from "./models/Note";
 import Card from "./components/Card";
 import Entry from "./components/Entry";
+import Stream from "./components/Stream"
+import Inbox from "./components/Inbox"
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -48,7 +51,7 @@ function App() {
     }).catch((err) => console.log(err));
   }, [notes, loaded]);
 
-  const modifyNote = (id: string, values: Partial<Note>) => {
+  const updateNote = (id: string, values: Partial<Note>) => {
     setNotes((notes) => {
       return notes.map((n) => (n.id === id ? { ...n, ...values } : n));
     });
@@ -58,44 +61,31 @@ function App() {
     setNotes((notes) => [...notes, createNote({ text })]);
   };
 
+  const applyToNote = (id: string, f: (n: Note) => Note) => {
+    setNotes((notes) => {
+      return notes.map((n) => (n.id === id ? f(n) : n));
+    });
+  }
+
   type View = "stream" | "inbox";
   const [view, setView] = useState<View>("stream");
+
+  // Set inbox notes
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime()
+  const cutoff = today // Date.now() + 0*24*60*60*1000
+  const inboxNotes = notes.filter((n) => n.dueDate <= cutoff && n.state === "Active");
 
   return (
     <div className="App">
       {view === "stream" ? (
-        <div className="stream">
-          <div className="column">
-            <div className="notes" style={{ overflow: "scroll" }}>
-              {notes
-                .slice()
-                .reverse()
-                .map((note) => (
-                  <Card
-                    key={note.id}
-                    note={note}
-                    keep={() => {}}
-                    archive={() => {}}
-                    modify={(values: Partial<Note>) => modifyNote(note.id, values)}
-                  />
-                  // <div key={note.id}>
-                  //   <p>{note.text}</p>
-                  //   <p style={{ fontSize: "0.2em" }}>{new Date(note.createdDate).toISOString()}</p>
-                  //   {/* <p style={{ fontSize: "0.2em" }}>{note.createdDate}</p> */}
-                  // </div>
-                ))}
-            </div>
-            <Entry addNote={addNote} />
-          </div>
-        </div>
+        <Stream {...{notes, updateNote, addNote}} />
       ) : (
-        <div id="inbox">
-          <p>This is the inbox</p>
-        </div>
+        <Inbox {...{inboxNotes, updateNote, addNote}} />
       )}
       <nav>
-        <button onClick={() => setView("stream")}>Stream</button>
-        <button onClick={() => setView("inbox")}>Inbox</button>
+        <button className={view === "stream"? "selected" : ""} onClick={() => setView("stream")}>Input</button>
+        <button className={view === "inbox"? "selected" : ""} onClick={() => setView("inbox")}>Process ({inboxNotes.length})</button>
       </nav>
     </div>
   );

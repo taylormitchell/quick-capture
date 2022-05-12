@@ -12,13 +12,15 @@ export type Note = {
 
 export function create(note: Partial<Note>): Note {
   const now = Date.now();
+  const tomorrow = now + 24*60*60*1000;
+
   return {
     id: note.id || uuidv4(),
     text: note.text || "",
     interval: note.interval || 1,
     createdDate: note.createdDate || now,
     lastModifiedDate: note.lastModifiedDate || now,
-    dueDate: note.dueDate || now,
+    dueDate: note.dueDate || tomorrow,
     state: note.state || "Active",
   };
 }
@@ -27,7 +29,7 @@ export function keep(note: Note): Note {
   const dayInMilliseconds = 24 * 60 * 60 * 1000;
   const lastModifiedDate = Date.now();
   const interval = (2 + Math.random() / 2) * note.interval;
-  const dueDate = Date.now() + note.interval * dayInMilliseconds;
+  const dueDate = Math.round(Date.now() + note.interval*dayInMilliseconds);
   return { ...note, lastModifiedDate, dueDate, interval };
 }
 

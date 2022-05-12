@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Note } from "../models/Note";
+import * as model from "../models/Note";
+import Details from "./Details";
 
 type CardProps = {
   note: Note;
-  modify: (n: Partial<Note>) => void;
-  keep: () => void;
-  archive: () => void;
+  updateNote: (id: string, values: Partial<Note>) => void;
 };
 
 function Card(props: CardProps) {
   const { note } = props;
+  const keep = () => props.updateNote(note.id, model.keep(note));
+  const archive = () => props.updateNote(note.id, model.archive(note));
+  const update = (values: Partial<Note>) => props.updateNote(note.id, values);
+
   const [textEditing, setTextEditing] = useState<string>("");
   const [textEditable, setTextEditable] = useState<boolean>(false);
   const textArea = useRef<HTMLTextAreaElement>(null);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
   // Focus when selected
   useEffect(() => {
@@ -30,15 +35,15 @@ function Card(props: CardProps) {
   };
 
   const textBlurHandler = () => {
-    props.modify({ text: textEditing });
+    update({ text: textEditing });
     setTextEditable(false);
     setTextEditing("");
   };
 
   return (
     <div id={note.id} className="card">
-      <div className="main">
-        <div className="text">
+      <main>
+        <section>
           {textEditable ? (
             <textarea
               ref={textArea}
@@ -49,15 +54,19 @@ function Card(props: CardProps) {
           ) : (
             <p onClick={textFocusHandler}> {note.text} </p>
           )}
-        </div>
-        <div className="actions">
-          <button onClick={props.keep}>Keep</button>
-          <button onClick={props.archive}>Archive</button>
-        </div>
-      </div>
-      <div className="details">
-        <p>{new Date(note.createdDate).toISOString()}</p>
-      </div>
+        </section>
+        <footer>
+          <Details details={showDetails ? note : {createdDate: note.createdDate}} />
+          <button
+            style={{ backgroundColor: "transparent", border: "none" }}
+            onClick={() => setShowDetails(v => !v)}
+          >...</button>
+        </footer>
+      </main>
+      {/* <aside>
+          <button onClick={keep}>Keep</button>
+          <button onClick={archive}>Archive</button>
+      </aside> */}
     </div>
   );
 }

@@ -59,6 +59,7 @@ html, body, #root, .App, .stream {
   display: flex;
   flex-direction: column;
   background-color: #fafafa;
+  align-items: flex-start;
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 20px 20px 10px 20px;
@@ -66,11 +67,10 @@ html, body, #root, .App, .stream {
   width: 100%;
 }
 
-.card .main {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
+.card footer {
+  color: grey;
 }
+
 
 .card .details > * {
   margin: 2px;
@@ -122,4 +122,44 @@ html, body, #root, .App, .stream {
 .actions > *:hover {
   cursor: pointer;
 }
+
+
+.inbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.inbox main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.App nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.App nav > button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.25em;
+  border-top: 2px solid transparent;
+}
+
+.App nav > button.selected {
+  border-top-color: rgba(0, 0, 255, 0.423);
+}
+
+.App nav > button:hover {
+  cursor: pointer;
+  background-color: rgb(237, 237, 237);
+}
+
 
