@@ -9,6 +9,7 @@ export function useSyncingState<T>(
   const [prevPushState, setPrevPushState] = useState("");
   const [initialValue, setInitialValue] = useState<T>(state);
   const [stateConnected, setStateConnected] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
   // Initialize the state
   useEffect(() => {
@@ -30,12 +31,13 @@ export function useSyncingState<T>(
       }
       let data = await res.json();
       setState(data);
+      setLoaded(true);
       console.log(`Loaded "${key}" state from data store`);
     }
     if(stateConnected) {
       load();
     }
-  }, [key, initialValue]);
+  }, [key, stateConnected, initialValue]);
 
   // Watch file on server and pull when it changes
   useEffect(() => {
@@ -59,12 +61,13 @@ export function useSyncingState<T>(
           if (lastModified > lastSync) {
             let res = await fetch(`/api/data/${key}`);
             if (!res.ok) {
-              throw new Error(`HEAD ${key} failed with status code ${res.status}`);
+              throw new Error(`GET ${key} failed with status code ${res.status}`);
             }
             let lastModified = new Date(res.headers.get("Last-Modified") || "").getTime();
             let data = await res.json();
             setState(data);
             setLastSync(lastModified);
+            setLoaded(true);
             console.log(`Pulled "${key}" state from data store`);
           }
         } catch (err) {
@@ -113,10 +116,10 @@ export function useSyncingState<T>(
         // alert(message)
       }
     }
-    if(stateConnected) {
+    if(loaded && stateConnected) {
       pushOnChange();
     }
-  }, [key, state, prevPushState, stateConnected]);
+  }, [key, state, prevPushState, stateConnected, loaded]);
 
   return [state, setState, stateConnected];
 }
