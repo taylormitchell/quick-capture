@@ -10,6 +10,12 @@ export function useSyncingState<T>(
   const [initialValue, setInitialValue] = useState<T>(state);
   const [stateConnected, setStateConnected] = useState(true);
   const [loaded, setLoaded] = useState(false);
+  // const [countSyncErrors, setCountSyncErrors] = useState(0);
+  // const maxSyncErrors = 5;
+
+  // if(countSyncErrors > maxSyncErrors) {
+  //   setStateConnected(false);
+  // };
 
   // Initialize the state
   useEffect(() => {
@@ -34,16 +40,14 @@ export function useSyncingState<T>(
       setLoaded(true);
       console.log(`Loaded "${key}" state from data store`);
     }
-    if(stateConnected) {
-      load();
-    }
+    load();
   }, [key, stateConnected, initialValue]);
 
   // Watch file on server and pull when it changes
   useEffect(() => {
     let id = setInterval(() => {
       async function pullOnChange() {
-        console.log(`Running pullOnChange for ${key}`);
+        // console.log(`Running pullOnChange for ${key}`);
         // In serverless deploys, data is stored locally by a single client so
         // there's no need to pull changes.
         if (process.env.REACT_APP_SERVERLESS) {
@@ -53,10 +57,9 @@ export function useSyncingState<T>(
         try {
           let res = await fetch(`/api/data/${key}`, { method: "HEAD" });
           if (!res.ok) {
-            setStateConnected(false);
             throw new Error(`HEAD ${key} failed with status code ${res.status}`);
           }
-          setStateConnected(true);
+          // setStateConnected(true);
           let lastModified = new Date(res.headers.get("Last-Modified") || "").getTime();
           if (lastModified > lastSync) {
             let res = await fetch(`/api/data/${key}`);
@@ -71,6 +74,7 @@ export function useSyncingState<T>(
             console.log(`Pulled "${key}" state from data store`);
           }
         } catch (err) {
+          // setCountSyncErrors(n => n + 1)
           let message = `Failed to pull ${key} state from data store.`;
           console.error(message, err);
           // alert(message)
@@ -84,7 +88,7 @@ export function useSyncingState<T>(
   // Push state to server when it changes
   useEffect(() => {
     async function pushOnChange() {
-      console.log(`Running pushOnChange for ${key}`);
+      // console.log(`Running pushOnChange for ${key}`);
       const currentState = JSON.stringify(state);
       if (currentState === prevPushState) {
         return;
@@ -111,6 +115,7 @@ export function useSyncingState<T>(
         setPrevPushState(currentState);
         console.log(`Pushed "${key}" state to data store.`);
       } catch (err) {
+        // setCountSyncErrors(n => n + 1)
         let message = `Failed to push ${key} state to data store.`;
         console.error(message, err);
         // alert(message)
