@@ -10,13 +10,13 @@ html, body, #root, .App, .stream {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .entry {
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: flex-end;
   border: 1px solid #ccc;
 }
 
@@ -43,7 +43,7 @@ html, body, #root, .App, .stream {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   max-width: 500px;
 }
 

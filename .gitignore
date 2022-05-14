@@ -1,6 +1,6 @@
 src/client/build/*
 src/node_modules/*
 src/client/node_modules/*
-src/db/*
+src/data/*
 .DS_Store
 .archive

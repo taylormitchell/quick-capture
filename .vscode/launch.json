@@ -25,6 +25,17 @@
             "cwd": "${workspaceFolder}/src",
         },
         {
+            "name": "npm run client serverless",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run client",
+            "env": {
+                "REACT_APP_SERVERLESS": "true",
+                "BROWSER": "none"
+            },
+            "cwd": "${workspaceFolder}/src",
+        },
+        {
             "name": "open chrome",
             "type": "chrome",
             "request": "launch",
@@ -37,8 +48,13 @@
     ],
     "compounds": [
         {
-          "name": "run client, server, and open chrome",
+          "name": "run full stack",
           "configurations": ["npm run server", "npm run client", "open chrome"],
+          "stopAll": true,
+        },
+        {
+          "name": "run full stack serverless",
+          "configurations": ["npm run client serverless", "open chrome"],
           "stopAll": true,
         }
     ]
