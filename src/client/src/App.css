@@ -2,60 +2,130 @@
   box-sizing: border-box;
 }
 
-html, body, #root, .App, .stream {
+html, body, #root, .App {
+  width: 100%;
   height: 100%;
 } 
 
 .App {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.App main {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-end;
 }
 
-.entry {
+.App main .column {
+  overflow-y: scroll;
+  width: 100%;
+  padding: 0 20% 0 20%;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  border: 1px solid #ccc;
+  flex-direction: column-reverse;
 }
 
-.entry > textarea {
+.App main .entry {
+  flex: 0;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-end;
+  padding: 0 10px 10px 10px;
+  width: 100%;
+  border-top: 1px solid #ccc;
+}
+
+#create-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 80px;
+  height: 80px;
+  line-height: 75px;
+  border-radius: 40px;
+  border: 0;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.244);
+  background-color: rgb(56, 175, 255);
+  color: white;
+  font-size: 2.5em;
+  text-align: center;
+}
+.App > nav {
+  flex-grow: 0;
+}
+
+.App > nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border-top: 1px solid #ccc;
+  width: 100%;
+}
+
+.App nav > button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.25em;
+  border-top: 2px solid transparent;
+  text-align: center;
+}
+
+.App nav > button.selected {
+  border-top-color: rgba(0, 0, 255, 0.423);
+}
+
+.App nav > button:hover {
+  cursor: pointer;
+  background-color: rgb(237, 237, 237);
+}
+
+
+
+.entry .close-button {
+  border: none;
+  background-color: transparent;
+  width: min-content;
+  font-size: 1.5em;
+}
+
+.entry > form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end; 
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.entry > form > textarea {
   flex: 1;
   resize: none;
   width: 100%;
-  max-height: 100px;
   min-height: 50px;
   border: none;
   font-size: 1em;
 }
 
-.entry > textarea:focus {
+.entry > form > textarea:focus {
   outline: none !important;
 }
 
-.entry > input {
+.entry > form > input {
   height: min-content;
   font-size: 1em;
+  float: right;
 }
 
-.column {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  max-width: 500px;
-}
 
-.notes {
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 10px 30px 10px 10px;
-}
-
-.column > * {
-  width: 100%;
-}
 
 .card {
   display: flex;
@@ -72,7 +142,6 @@ html, body, #root, .App, .stream {
 .card footer {
   color: grey;
 }
-
 
 .card .details > * {
   margin: 2px;
@@ -125,43 +194,13 @@ html, body, #root, .App, .stream {
   cursor: pointer;
 }
 
-
-.inbox {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 100%;
-}
-
-.inbox main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.App nav {
+.card .quick-actions {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+  justify-content: center;
 }
-
-.App nav > button {
-  background-color: transparent;
-  border: none;
-  font-size: 1.25em;
-  border-top: 2px solid transparent;
-}
-
-.App nav > button.selected {
-  border-top-color: rgba(0, 0, 255, 0.423);
-}
-
-.App nav > button:hover {
-  cursor: pointer;
-  background-color: rgb(237, 237, 237);
+.card .quick-actions > button {
+  font-size: 1em;
 }
 
 

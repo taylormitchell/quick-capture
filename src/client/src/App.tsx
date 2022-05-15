@@ -3,23 +3,35 @@ import "./App.css";
 import { Note, create as createNote } from "./models/Note";
 import Stream from "./components/Stream";
 import Inbox from "./components/Inbox";
+import Entry from "./components/Entry";
 import { useSyncingState } from "./syncHook";
 
 function App() {
   const [notes, setNotes, notesConnected] = useSyncingState<Note[]>([], "notes");
+  // const [noteInput, setNoteInput] = useState<Partial<Note>>({});
+  const [noteForm, setNoteForm] = useState<Partial<Note>>({});
 
   const updateNote = (id: string, values: Partial<Note>) => {
     setNotes((notes) => {
       return notes.map((n) => (n.id === id ? { ...n, ...values } : n));
     });
   };
-
-  const addNote = (text: string) => {
-    setNotes((notes) => [...notes, createNote({ text })]);
+  const addNote = (note: Partial<Note>) => {
+    setNotes((notes) => [...notes, createNote(note)]);
   };
 
-  type View = "stream" | "inbox";
-  const [view, setView] = useState<View>("stream");
+  const updateNoteForm = (values: Partial<Note>) => {
+    setNoteForm((noteForm) => {
+      return { ...noteForm, ...values };
+    });
+  };
+  const submitNoteForm = () => {
+    addNote(noteForm);
+    setNoteForm({});
+  };
+
+  type View = "list" | "inbox" | "entry";
+  const [view, setView] = useState<View>("list");
 
   // Set inbox notes
   const now = new Date();
@@ -27,19 +39,35 @@ function App() {
   const cutoff = today; // Date.now() + 0*24*60*60*1000
   const inboxNotes = notes.filter((n) => n.dueDate <= cutoff && n.state === "Active");
 
-  if(!notesConnected) {
+  const [entryOpen, setEntryOpen] = useState(false);
+  if (!notesConnected) {
     return <div>Can't connect to server, no app for you :(</div>;
   }
   return (
     <div className="App">
-      {view === "stream" ? (
-        <Stream {...{notes, updateNote, addNote}} />
-      ) : (
-        <Inbox {...{inboxNotes, updateNote, addNote}} />
-      )}
+      <main>
+        {view === "list" && <Stream notes={notes} updateNote={updateNote} />}
+        {view === "inbox" && <Inbox inboxNotes={inboxNotes} updateNote={updateNote} />}
+        {entryOpen ? (
+          <Entry
+            noteForm={noteForm}
+            updateNoteForm={updateNoteForm}
+            submitNoteForm={submitNoteForm}
+            closeEntry={() => setEntryOpen(false)}
+          />
+        ) : (
+          <div id="create-button" onClick={() => setEntryOpen(true)}>
+            +
+          </div>
+        )}
+      </main>
       <nav>
-        <button className={view === "stream"? "selected" : ""} onClick={() => setView("stream")}>Entry</button>
-        <button className={view === "inbox"? "selected" : ""} onClick={() => setView("inbox")}>Inbox</button>
+        <button className={view === "list" ? "selected" : ""} onClick={() => setView("list")}>
+          List
+        </button>
+        <button className={view === "inbox" ? "selected" : ""} onClick={() => setView("inbox")}>
+          Inbox
+        </button>
       </nav>
     </div>
   );

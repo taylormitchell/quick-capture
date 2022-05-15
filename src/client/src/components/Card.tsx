@@ -6,6 +6,7 @@ import Details from "./Details";
 type CardProps = {
   note: Note;
   updateNote: (id: string, values: Partial<Note>) => void;
+  quickActions?: JSX.Element;
 };
 
 function Card(props: CardProps) {
@@ -61,6 +62,12 @@ function Card(props: CardProps) {
             style={{ backgroundColor: "transparent", border: "none" }}
             onClick={() => setShowDetails(v => !v)}
           >...</button>
+          {props.quickActions}
+          {/* <div className="card-main-actions">
+            <button onClick={keep}>Keep</button>
+            <button onClick={archive}>Archive</button>
+            <button onClick={() => {}}>Skip</button>
+          </div> */}
         </footer>
       </main>
       {/* <aside>

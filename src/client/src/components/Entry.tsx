@@ -1,18 +1,25 @@
 import { useState, useRef } from "react";
+import Note from "../models/Note"
+import ReactDOM from "react-dom";
+import React from "react";
 
 type Props = {
-  addNote: (text: string) => void;
+  noteForm: Partial<Note>;
+  updateNoteForm: (values: Partial<Note>) => void;
+  submitNoteForm: () => void;
+  closeEntry: () => void;
 };
 const Entry = (props: Props) => {
   const initialText = ""
   const initialHeight = "auto"
-  const [entry, setEntry] = useState<string>(initialText);
+  // const [entry, setEntry] = useState<string>(initialText);
   const [height, setHeight] = useState<string>(initialHeight);
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const changeHandler = () => {
     let textArea = textAreaRef.current!;
-    setEntry(textArea.value);
+    props.updateNoteForm({text: textArea.value });
+    // setEntry(textArea.value);
     if(textArea.clientHeight < textArea.scrollHeight) {
       setHeight(textArea.scrollHeight + "px")
     } else if(textArea.value === "") {
@@ -22,26 +29,29 @@ const Entry = (props: Props) => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    props.addNote(entry);
-    setEntry(initialText);
+    props.submitNoteForm();
+    // setEntry(initialText);
     setHeight(initialHeight)
     textAreaRef.current!.focus();
   };
 
 
   return (
-    <form className="entry" onSubmit={submitHandler}>
-      <textarea
-        ref={textAreaRef}
-        id="text"
-        placeholder="Enter note"
-        value={entry}
-        onChange={changeHandler}
-        style={{height: height, overflowY: "hidden"}}
-        autoFocus={true}
-      />
-      <input type="submit" value="Submit" />
-    </form>
+      <div className="entry"> 
+        <button className="close-button" onClick={props.closeEntry}>x</button>
+        <form onSubmit={submitHandler}>
+          <textarea
+            ref={textAreaRef}
+            id="text"
+            placeholder="Enter note"
+            value={props.noteForm.text || ""}
+            onChange={changeHandler}
+            style={{height: height, overflowY: "hidden"}}
+            // autoFocus={true}
+          />
+          <input type="submit" value="↑" />
+        </form>
+      </div>
   );
 };
 
