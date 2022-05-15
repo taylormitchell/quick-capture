@@ -9,7 +9,7 @@ import { useSyncingState } from "./syncHook";
 function App() {
   const [notes, setNotes, notesConnected] = useSyncingState<Note[]>([], "notes");
   // const [noteInput, setNoteInput] = useState<Partial<Note>>({});
-  const [noteForm, setNoteForm] = useState<Partial<Note>>({});
+  const [noteForm, setNoteForm] = useState<{text: string} & Partial<Note>>({text: ""});
 
   const updateNote = (id: string, values: Partial<Note>) => {
     setNotes((notes) => {
@@ -34,7 +34,7 @@ function App() {
   };
   const submitNoteForm = () => {
     addNote(noteForm);
-    setNoteForm({});
+    setNoteForm({text: ""});
   };
 
   type View = "list" | "inbox" | "entry";
@@ -68,6 +68,7 @@ function App() {
           </div>
         )}
       </main>
+      {!entryOpen && (
       <nav>
         <button className={view === "list" ? "selected" : ""} onClick={() => setView("list")}>
           List
@@ -76,6 +77,7 @@ function App() {
           Inbox
         </button>
       </nav>
+      )}
     </div>
   );
 }

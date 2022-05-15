@@ -32,9 +32,15 @@ const Entry = (props: Props) => {
     props.submitNoteForm();
     // setEntry(initialText);
     setHeight(initialHeight)
-    textAreaRef.current!.focus();
+    // textAreaRef.current!.focus();
+    props.closeEntry();
   };
 
+  const blurHandler = () => {
+    if(props.noteForm.text === "") {
+      props.closeEntry();
+    }
+  }
 
   return (
       <div className="entry"> 
@@ -47,7 +53,8 @@ const Entry = (props: Props) => {
             value={props.noteForm.text || ""}
             onChange={changeHandler}
             style={{height: height, overflowY: "hidden"}}
-            // autoFocus={true}
+            autoFocus={true}
+            onBlur={blurHandler}
           />
           <input type="submit" value="↑" />
         </form>
