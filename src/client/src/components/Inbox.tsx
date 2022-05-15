@@ -1,20 +1,19 @@
 import Note from "../models/Note";
 import Entry from "../components/Entry";
 import Card from "../components/Card";
-import * as model from "../models/Note";
+import * as actions from "../models/Note";
 import React from "react";
 
 type Props = {
   inboxNotes: Note[];
-  updateNote: (id: string, values: Partial<Note>) => void;
+  applyToNote: (id: string, fn: (n: Note) => Note) => void;
 };
 
 const Inbox = (props: Props) => {
   const { inboxNotes } = props;
-  const currentNote = inboxNotes.slice(-1)[0];
 
-  const keep = (id: string) => props.updateNote(id, model.keep(currentNote));
-  const archive = (id: string) => props.updateNote(id, model.archive(currentNote));
+  const keep = (id: string) => props.applyToNote(id, actions.keep);
+  const archive = (id: string) => props.applyToNote(id, actions.archive);
   // const skip = (id) => props.updateNote(currentNote.id, {...currentNote, dueDate: Date.now() + 5 * 60 * 1000});
   let quickActions = (id: string) => (
     <div className="quick-actions">
@@ -32,7 +31,7 @@ const Inbox = (props: Props) => {
       {props.inboxNotes
         .sort((a, b) => a.dueDate - b.dueDate)
         .map((n) => (
-          <Card key={n.id} note={n} updateNote={props.updateNote} quickActions={quickActions(n.id)}/>
+          <Card key={n.id} note={n} applyToNote={props.applyToNote} quickActions={quickActions(n.id)}/>
         ))}
     </div>
   );

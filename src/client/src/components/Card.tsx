@@ -5,15 +5,15 @@ import Details from "./Details";
 
 type CardProps = {
   note: Note;
-  updateNote: (id: string, values: Partial<Note>) => void;
+  applyToNote: (id: string, fn: (n: Note) => Note) => void;
   quickActions?: JSX.Element;
 };
 
 function Card(props: CardProps) {
   const { note } = props;
-  const keep = () => props.updateNote(note.id, model.keep(note));
-  const archive = () => props.updateNote(note.id, model.archive(note));
-  const update = (values: Partial<Note>) => props.updateNote(note.id, values);
+  const update = (values: Partial<Note>) => {
+    props.applyToNote(note.id, (n) => ({ ...n, ...values }));
+  }
 
   const [textEditing, setTextEditing] = useState<string>("");
   const [textEditable, setTextEditable] = useState<boolean>(false);
@@ -57,11 +57,13 @@ function Card(props: CardProps) {
           )}
         </section>
         <footer>
-          <Details details={showDetails ? note : {createdDate: note.createdDate}} />
+          <Details details={showDetails ? note : { createdDate: note.createdDate }} />
           <button
             style={{ backgroundColor: "transparent", border: "none" }}
-            onClick={() => setShowDetails(v => !v)}
-          >...</button>
+            onClick={() => setShowDetails((v) => !v)}
+          >
+            ...
+          </button>
           {props.quickActions}
           {/* <div className="card-main-actions">
             <button onClick={keep}>Keep</button>

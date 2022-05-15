@@ -16,6 +16,13 @@ function App() {
       return notes.map((n) => (n.id === id ? { ...n, ...values } : n));
     });
   };
+
+  const applyToNote = (id: string, fn: (n: Note) => Note) => {
+    setNotes((notes) => {
+      return notes.map((n) => (n.id === id ? fn(n) : n));
+    });
+  };
+
   const addNote = (note: Partial<Note>) => {
     setNotes((notes) => [...notes, createNote(note)]);
   };
@@ -46,8 +53,8 @@ function App() {
   return (
     <div className="App">
       <main>
-        {view === "list" && <Stream notes={notes} updateNote={updateNote} />}
-        {view === "inbox" && <Inbox inboxNotes={inboxNotes} updateNote={updateNote} />}
+        {view === "list" && <Stream notes={notes} applyToNote={applyToNote} />}
+        {view === "inbox" && <Inbox inboxNotes={inboxNotes} applyToNote={applyToNote} />}
         {entryOpen ? (
           <Entry
             noteForm={noteForm}

@@ -1,10 +1,9 @@
 import Note from "../models/Note";
-import Entry from "../components/Entry";
 import Card from "../components/Card";
 
 type Props = {
   notes: Note[];
-  updateNote: (id: string, values: Partial<Note>) => void;
+  applyToNote: (id: string, fn: (n: Note) => Note) => void;
 };
 
 const Stream = (props: Props) => {
@@ -14,7 +13,7 @@ const Stream = (props: Props) => {
         .slice()
         .reverse()
         .map((n) => (
-          <Card key={n.id} note={n} updateNote={props.updateNote} />
+          <Card key={n.id} note={n} applyToNote={props.applyToNote} />
         ))}
     </div>
   );
