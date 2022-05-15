@@ -28,7 +28,7 @@ html, body, #root, .App {
 .App main .column {
   overflow-y: scroll;
   width: 100%;
-  padding: 0 20% 0 20%;
+  padding: 0 10px 0 10px;
   display: flex;
   flex-direction: column-reverse;
 }
