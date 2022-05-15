@@ -29,7 +29,7 @@ const Inbox = (props: Props) => {
         <p>Remaining: {inboxNotes.length}</p>
       ): (<p>Done!</p>)}
       {props.inboxNotes
-        .sort((a, b) => a.dueDate - b.dueDate)
+        .sort((a, b) => b.dueDate - a.dueDate)
         .map((n) => (
           <Card key={n.id} note={n} applyToNote={props.applyToNote} quickActions={quickActions(n.id)}/>
         ))}
