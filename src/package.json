@@ -6,15 +6,17 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "client": "cd client && npm run start",
-    "server": "nodemon server.js --ignore 'data/*'",
+    "server": "nodemon server.ts --ignore 'data/*'",
     "install-full": "npm install && cd client && npm install",
     "build": "cd client && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production ts-node server.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.1"
+    "@types/express": "^4.17.13",
+    "express": "^4.18.1",
+    "ts-node": "^10.7.0"
   }
 }

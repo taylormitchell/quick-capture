@@ -1,14 +1,13 @@
-const express = require('express');
-const json = require('body-parser').json;
-const fs = require('fs');
-const path = require('path');
+import express, { Application, Request, Response, NextFunction, Errback } from 'express'
+import { json } from 'body-parser'
+import fs from 'fs'
+import path from 'path'
+import * as Note from './client/src/models/Note'
 
 const app = express();
 app.use(json())
 
 app.set('port', process.env.PORT || 3001);
-
-
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -20,12 +19,20 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/api/health', function(req, res, next) {
-  return res.status(200);
+app.get('/api/health', function(req: Request, res: Response) {
+  return res.status(200).send('OK');
 })
 
+app.post('/api/notes', function(req, res) {
+  const filepath = path.join(__dirname, 'data', 'notes.json')
+  const note = Note.create(req.body);
+  const notes = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+  notes.push(note);
+  fs.writeFileSync(filepath, JSON.stringify(notes, null, 2));
+  return res.status(201).json(note);
+})
 
-app.use('/api/data/:key', (req, res) => {
+app.use('/api/data/:key', (req: Request, res: Response) => {
   const filepath = path.join(__dirname, 'data', req.params.key + '.json');
   let body = {};
   if (req.method === 'GET') {
@@ -59,7 +66,7 @@ app.use('/api/data/:key', (req, res) => {
 });
 
 // Error handler
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   if(err.type === 'entity.parse.failed') {
     res.status(400);
