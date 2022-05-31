@@ -10,7 +10,9 @@
     "install-full": "npm install && cd client && npm install",
     "build": "cd client && REACT_APP_BACKEND=server npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "NODE_ENV=production ts-node server.ts"
+    "prod": "NODE_ENV=production ts-node server.ts",
+    "deploy": "cd .. && source .env.devops && source scripts/deploy.sh",
+    "deploy-demo": "cd .. && source .env.devops && source scripts/deploy-demo.sh"
   },
   "author": "",
   "license": "ISC",
