@@ -8,9 +8,9 @@
     "client": "cd client && REACT_APP_BACKEND=server npm run start",
     "server": "nodemon server.ts --ignore 'data/*'",
     "install-full": "npm install && cd client && npm install",
-    "build": "cd client && npm run build",
+    "build": "cd client && REACT_APP_BACKEND=server npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "NODE_ENV=production REACT_APP_BACKEND=server ts-node server.ts"
+    "prod": "NODE_ENV=production ts-node server.ts"
   },
   "author": "",
   "license": "ISC",
