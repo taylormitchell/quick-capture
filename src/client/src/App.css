@@ -158,7 +158,8 @@ html, body, #root, .App {
   flex: 1;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  background-color: blue;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .card .text textarea {

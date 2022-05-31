@@ -17,7 +17,7 @@ function Card(props: CardProps) {
     <div id={note.id} className="card">
       <main>
         <section>
-          <p>{note.text}</p>
+          <p className="text">{note.text}</p>
         </section>
         <footer>
           <Details details={showDetails ? note : { createdDate: note.createdDate }} />
@@ -28,11 +28,6 @@ function Card(props: CardProps) {
             ...
           </button>
           {props.quickActions}
-          {/* <div className="card-main-actions">
-            <button onClick={keep}>Keep</button>
-            <button onClick={archive}>Archive</button>
-            <button onClick={() => {}}>Skip</button>
-          </div> */}
         </footer>
       </main>
     </div>
