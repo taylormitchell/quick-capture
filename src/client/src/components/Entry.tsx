@@ -47,6 +47,7 @@ const Entry = (props: Props) => {
         <button className="close-button" onClick={props.closeEntry}>x</button>
         <form onSubmit={submitHandler}>
           <textarea
+            className="text"
             ref={textAreaRef}
             id="text"
             placeholder="Enter note"
