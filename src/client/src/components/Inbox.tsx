@@ -1,25 +1,21 @@
 import Note from "../models/Note";
-import Entry from "../components/Entry";
 import Card from "../components/Card";
 import * as actions from "../models/Note";
-import React from "react";
 
 type Props = {
   inboxNotes: Note[];
-  applyToNote: (id: string, fn: (n: Note) => Note) => void;
+  updateNote: (id: string, fn: (n: Note) => Note) => void;
 };
 
 const Inbox = (props: Props) => {
   const { inboxNotes } = props;
 
-  const keep = (id: string) => props.applyToNote(id, actions.keep);
-  const archive = (id: string) => props.applyToNote(id, actions.archive);
-  // const skip = (id) => props.updateNote(currentNote.id, {...currentNote, dueDate: Date.now() + 5 * 60 * 1000});
+  const keep = (id: string) => props.updateNote(id, actions.keep);
+  const archive = (id: string) => props.updateNote(id, actions.archive);
   let quickActions = (id: string) => (
     <div className="quick-actions">
-      <button onClick={() => keep(id)}>Keep</button>
-      <button onClick={() => archive(id)}>Archive</button>
-      {/* <button onClick={skip}>Skip</button> */}
+      <button onClick={() => keep(id)}><img src={require("../assets/icons8-return-24.png")} alt="Keep" title="Keep"/></button>
+      <button onClick={() => archive(id)}><img src={require("../assets/icons8-box-24.png")} alt="Archive" title="Archive"/></button>
     </div>
   )
 
@@ -31,7 +27,7 @@ const Inbox = (props: Props) => {
       {props.inboxNotes
         .sort((a, b) => b.dueDate - a.dueDate)
         .map((n) => (
-          <Card key={n.id} note={n} applyToNote={props.applyToNote} quickActions={quickActions(n.id)}/>
+          <Card key={n.id} note={n} updateNote={props.updateNote} quickActions={quickActions(n.id)}/>
         ))}
     </div>
   );

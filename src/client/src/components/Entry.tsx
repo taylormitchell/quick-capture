@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import Note from "../models/Note"
-import ReactDOM from "react-dom";
 import React from "react";
 
 type Props = {
@@ -10,9 +9,7 @@ type Props = {
   closeEntry: () => void;
 };
 const Entry = (props: Props) => {
-  const initialText = ""
   const initialHeight = "auto"
-  // const [entry, setEntry] = useState<string>(initialText);
   const [height, setHeight] = useState<string>(initialHeight);
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -30,9 +27,7 @@ const Entry = (props: Props) => {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.submitNoteForm();
-    // setEntry(initialText);
     setHeight(initialHeight)
-    // textAreaRef.current!.focus();
     props.closeEntry();
   };
 
@@ -50,7 +45,6 @@ const Entry = (props: Props) => {
             className="text"
             ref={textAreaRef}
             id="text"
-            placeholder="Enter note"
             value={props.noteForm.text || ""}
             onChange={changeHandler}
             style={{height: height, overflowY: "hidden"}}

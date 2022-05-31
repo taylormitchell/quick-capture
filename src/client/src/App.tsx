@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import { Note, create as createNote } from "./models/Note";
-import Stream from "./components/Stream";
+import All from "./components/All";
 import Inbox from "./components/Inbox";
 import Entry from "./components/Entry";
 import { useSyncingState } from "./syncHook";
 
 function App() {
   const [notes, setNotes, notesConnected] = useSyncingState<Note[]>([], "notes");
-  // const [noteInput, setNoteInput] = useState<Partial<Note>>({});
   const [noteForm, setNoteForm] = useState<{text: string} & Partial<Note>>({text: ""});
 
-  const updateNote = (id: string, values: Partial<Note>) => {
-    setNotes((notes) => {
-      return notes.map((n) => (n.id === id ? { ...n, ...values } : n));
-    });
-  };
-
-  const applyToNote = (id: string, fn: (n: Note) => Note) => {
+  const updateNote = (id: string, fn: (n: Note) => Note) => {
     setNotes((notes) => {
       return notes.map((n) => (n.id === id ? fn(n) : n));
     });
@@ -37,14 +30,13 @@ function App() {
     setNoteForm({text: ""});
   };
 
-  type View = "list" | "inbox" | "entry";
-  const [view, setView] = useState<View>("list");
+  type View = "all" | "inbox" | "entry";
+  const [view, setView] = useState<View>("all");
 
   // Set inbox notes
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
-  const cutoff = today; // Date.now() + 0*24*60*60*1000
-  const inboxNotes = notes.filter((n) => n.dueDate <= cutoff && n.state === "Active");
+  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
+  const inboxNotes = notes.filter((n) => n.dueDate <= tomorrow && n.state === "Active");
 
   const [entryOpen, setEntryOpen] = useState(false);
   if (!notesConnected) {
@@ -53,8 +45,8 @@ function App() {
   return (
     <div className="App">
       <main>
-        {view === "list" && <Stream notes={notes} applyToNote={applyToNote} />}
-        {view === "inbox" && <Inbox inboxNotes={inboxNotes} applyToNote={applyToNote} />}
+        {view === "all" && <All notes={notes} updateNote={updateNote} />}
+        {view === "inbox" && <Inbox inboxNotes={inboxNotes} updateNote={updateNote} />}
         {entryOpen ? (
           <Entry
             noteForm={noteForm}
@@ -70,8 +62,8 @@ function App() {
       </main>
       {!entryOpen && (
       <nav>
-        <button className={view === "list" ? "selected" : ""} onClick={() => setView("list")}>
-          List
+        <button className={view === "all" ? "selected" : ""} onClick={() => setView("all")}>
+          All
         </button>
         <button className={view === "inbox" ? "selected" : ""} onClick={() => setView("inbox")}>
           Inbox

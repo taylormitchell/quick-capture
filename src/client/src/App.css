@@ -7,11 +7,18 @@ html, body, #root, .App {
   height: 100%;
 } 
 
+#root {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .App {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  max-width: 600px;
 }
 
 .App main {
@@ -29,8 +36,7 @@ html, body, #root, .App {
   overflow-y: scroll;
   overflow-x: hidden;
   width: 100%;
-  padding: 0 30px 10px 10px;
-  margin-top: 75px;
+  padding: 100px 30px 10px 10px;
   display: flex;
   flex-direction: column-reverse;
 }
@@ -65,6 +71,8 @@ html, body, #root, .App {
   cursor: pointer;
 }
 
+
+
 .App > nav {
   flex-grow: 0;
 }
@@ -96,7 +104,9 @@ html, body, #root, .App {
   /* background-color: rgb(237, 237, 237); */
 }
 
-
+.text {
+  font-size: 1rem;
+}
 
 .entry .close-button {
   border: none;
@@ -135,16 +145,18 @@ html, body, #root, .App {
   display: flex;
   flex-direction: column;
   background-color: #fafafa;
-  align-items: flex-start;
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px 20px 10px 20px;
+  padding: 5px 20px 10px 20px;
   margin: 10px;
   width: 100%;
 }
 
-.card footer {
-  color: grey;
+.card header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  color: rgb(158, 158, 158);
 }
 
 .card .details > * {
@@ -153,16 +165,31 @@ html, body, #root, .App {
   font-size: 0.75em;
 }
 
-.text {
-  font-size: 1rem;
+/* Break very long words */
+.card .text {
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
-.card .text {
-  flex: 1;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
+.inbox .quick-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* add space between */
+}
+
+.inbox .quick-actions button {
+  background-color: Transparent;
+  border: none;
+}
+
+.inbox .quick-actions button img {
+  filter: grayscale(100%) opacity(50%);
+}
+
+.inbox .quick-actions button:hover {
+  background-color: rgb(237, 237, 237);
+  cursor: pointer;
 }
 
 .info {
