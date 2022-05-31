@@ -2,5 +2,6 @@ src/client/build/*
 src/node_modules/*
 src/client/node_modules/*
 src/data/*
+.env*
 .DS_Store
 .archive

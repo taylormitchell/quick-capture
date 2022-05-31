@@ -12,6 +12,12 @@ TODO
 ### Update prod 
 
 1. Commit your changes to master
-2. Run `source deploy.sh`
+2. Run `source .env.devops && source deploy.sh`
+
+### Deploy demo
+
+```
+source .env.devops && source scripts/deploy-demo.sh
+```
 
 
