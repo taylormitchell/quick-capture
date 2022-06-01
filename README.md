@@ -1,72 +1,35 @@
 # Quick Capture
 
-Quick Capture is a mobile web app for quickly capturing notes. 
+This is an experimental quick capture tool for mobile. You can try out a demo of it [here](https://taylormitchell.github.io/quick-capture/). 
 
-The main purpose is to prototype a new workflow for notes whose purpose is to solve a problem that many note-taking tools have: notes go in but they're never seen again.
+<div style="display: flex; justify-content: center">
+    <img src="app-screenshot.png" style="height: 500px;"/>
+</div>
 
-Quick capture has two views: a full list of all your notes, and an inbox.
+Quick Capture attempts to solve a problem which many note-taking apps have: once you put a note in, you never see it again. 
 
+The proposed solution is to repeatedly schedule every single note for review. That may sound like an absurd amount of work for the user, but if you use an expanding schedule (common in flashcard apps like [Anki](https://apps.ankiweb.net/)), you can ensure that even as your collection of notes grows indefinitely, the time spent reviewing old notes stays approximately constant. 
 
-The inbox view has a list of notes which are due for review. Whenever you add a note to the app, it becomes due for review the same day.
+**How it works**: Whenever a note is added, it becomes due for review. Whenever a note is due, it'll appear in your inbox. To process your inbox, you go through each note and decide if you want to keep it or archive it. If you archive it, you'll never see the note again. If you keep it, the app will schedule it again for a later date. Every time you review and decide to keep a note, it's scheduled twice as far into the future as it was last time. So initially you'll see a note every few days, then every few weeks, then eventually months and years apart. 
 
-The default action to process an item in your inbox is to "keep" it. When you keep an item, the app will reschedule it for a later date 
+## Setup
 
-The "keep" action is like the snooze feature which many email clients have. But instead of deciding on an exact date to snooze the item until, you just tell the app you want to keep it around, and it'll choose a date for you.
+This app isn't really meant for anyone else to use, but if you'd like to try spinning it up your yourself, here's how to do it:
 
-The scheduler is the same is many populate [spaced repeition apps]. Every time you review an item, it gets rescheduled further and further into the future. So each time you review the inbox, you're mostly seeing what you added recently but also interleaved which notes you took a while ago.   
-
-
-
-When an item is in the inbox, you can process it in one of two ways: you can archive it, meaning you 
-
-
-
-Every note that you add 
-
-
-
-
-It's mostly a prototype 
-
-
-The two main design considerations were:
-- Make entering a new note as quick as possible
-- Reliably bring notes back to your attention 
-
-
-Spaced repetition flashcard apps use an scheduler which 
-When you first study a card, you'll see it the next day, then next time you study it you'll see it in 2 days, and then 4 days, a week, 2 weeks, etc.
-
-This is where the "spaced repetition" comes from. You repeatedly see the same card, but the space to the next review keeps growing after each succesful review.
-
-
-Take a quick capturing a todo for example. If you have some inbox for capturing tasks that come to mind, clearing you inbox requires going through the list and making a decision about what exactly you're going to do with that task e.g. add it to a project-specific task manager? schedule it for the future? assign it to someone? 
-
-This can be very burdensome, and often leads either to an inbox that's always growing or it a many tasks religated to the bin.    
-
-
-
-
-
-
-
-
-### Environment variables
-- `DROPLET_IP`: IP address of droplet server to deploy to
-- `DROPLET_USER`: User on the droplet server to deploy to
-
-### Set up prod
-TODO
-
-### Update prod 
-
-1. Commit your changes to master
-2. Run `source .env.devops && source deploy.sh`
-
-### Deploy demo
-
+Install
 ```
-source .env.devops && source scripts/deploy-demo.sh
+git clone https://github.com/taylormitchell/quick-capture
+cd quick-capture/src
+npm run install-full
 ```
 
+Run in dev
+```
+npm run start
+```
 
+Run in prod
+```
+npm run build
+npm run prod
+```
