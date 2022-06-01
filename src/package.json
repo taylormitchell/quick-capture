@@ -14,7 +14,7 @@
     "deploy": "cd .. && source .env.devops && source scripts/deploy.sh",
     "deploy-demo": "cd .. && source .env.devops && source scripts/deploy-demo.sh"
   },
-  "author": "",
+  "author": "Taylor Mitchell",
   "license": "ISC",
   "dependencies": {
     "@types/express": "^4.17.13",
