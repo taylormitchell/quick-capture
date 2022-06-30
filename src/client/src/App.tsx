@@ -6,8 +6,11 @@ import Inbox from "./components/Inbox";
 import Entry from "./components/Entry";
 import { useSyncingState } from "./syncHook";
 
+const backend: "local" | "server" = process.env.REACT_APP_BACKEND === "server" ? "server" : "local";
+
 function App() {
-  const [notes, setNotes, notesConnected] = useSyncingState<Note[]>([], "notes");
+  const initialNotes = backend === "server" ? [] : require("./assets/demo-notes.json");
+  const [notes, setNotes, notesConnected] = useSyncingState<Note[]>(initialNotes, "notes");
   const [noteForm, setNoteForm] = useState<{text: string} & Partial<Note>>({text: ""});
 
   const updateNote = (id: string, fn: (n: Note) => Note) => {
